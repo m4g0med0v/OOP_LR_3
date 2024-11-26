@@ -15,11 +15,19 @@
 # содержит меньший номинал.
 
 
+from typing import Dict, List, Optional
+
+
 class Money:
-    def __init__(self, initial_data=None, max_size=10):
-        self.size = max_size  # Максимальное количество элементов
-        self.data = []  # Список словарей для представления купюр
-        self.count = 0  # Текущее количество элементов
+    def __init__(
+        self, initial_data: Optional[str] = None, max_size: int = 10
+    ) -> None:
+        # Максимальное количество элементов
+        self._size: int = max_size
+        # Список словарей для представления купюр
+        self.data: List[Dict] = []
+        # Текущее количество элементов
+        self.count: int = 0
 
         # Инициализация через строку или список словарей
         if isinstance(initial_data, str):
@@ -27,20 +35,20 @@ class Money:
         elif isinstance(initial_data, list):
             self._initialize_from_list(initial_data)
 
-    def _initialize_from_string(self, data_string):
+    def _initialize_from_string(self, data_string: str) -> None:
         pairs = data_string.split(", ")
         for pair in pairs:
             denom, count = pair.split(":")
             self.add(denom.strip(), int(count.strip()))
         self.count = len(self.data)
 
-    def _initialize_from_list(self, data_list):
+    def _initialize_from_list(self, data_list: List[Dict]) -> None:
         for item in data_list:
             if "denomination" in item and "count" in item:
                 self.add(item["denomination"], item["count"])
         self.count = len(self.data)
 
-    def add(self, denomination, count):
+    def add(self, denomination: str, count: int) -> None:
         if self.count < self.size:
             # Проверяем, есть ли уже такой номинал в списке
             for item in self.data:
@@ -58,21 +66,26 @@ class Money:
                 "Максимальный размер достигнут. Невозможно добавить больше элементов."
             )
 
-    def _size(self):
-        return self.size
+    @property
+    def size(self) -> int:
+        return self._size
 
-    def __getitem__(self, index):
+    @size.setter
+    def size(self, value: int) -> None:
+        self._size = value
+
+    def __getitem__(self, index: int) -> Dict:
         if 0 <= index < self.count:
             return self.data[index]
         else:
             raise IndexError("Индекс вне диапазона.")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return ", ".join(
             [f"{item['denomination']}: {item['count']}" for item in self.data]
         )
 
-    def __len__(self):
+    def __len__(self) -> int:
         return self.count
 
 
@@ -83,6 +96,6 @@ if __name__ == "__main__":
     money.add("20", 3)
     print(money)
 
-    print(money._size())
+    print(money.size)
     print(len(money))
     print(money[3])

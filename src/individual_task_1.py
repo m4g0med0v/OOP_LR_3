@@ -39,40 +39,36 @@ class Pair:
         return self.first <= number < self.second
 
     # Перегрузка оператора сложения
-    def __add__(self, other):
+    def __add__(self, other: "Pair") -> "Pair":
         if isinstance(other, Pair):
             return Pair(self.first + other.first, self.second + other.second)
         raise ValueError("Операция сложения возможна только с объектами типа Pair.")
 
     # Перегрузка оператора вычитания
-    def __sub__(self, other):
+    def __sub__(self, other: "Pair") -> "Pair":
         if isinstance(other, Pair):
             return Pair(self.first - other.first, self.second - other.second)
         raise ValueError("Операция вычитания возможна только с объектами типа Pair.")
 
     # Перегрузка оператора равенства
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if isinstance(other, Pair):
             return (self.first == other.first) and (self.second == other.second)
         return False
 
     # Перегрузка оператора сравнения
-    def __lt__(self, other):
+    def __lt__(self, other: "Pair") -> bool:
         if isinstance(other, Pair):
             return self.first < other.first and self.second < other.second
         raise ValueError("Операция сравнения возможна только с объектами типа Pair.")
 
     # Перегрузка оператора строкового предстваления
-    def __str__(self):
+    def __str__(self) -> str:
         return f"[{self.first}, {self.second})"
 
 
-def make_Pair(first: int, second: int):
-    try:
-        return Pair(first, second)
-    except ValueError as e:
-        print(f"Ошибка при создании пары: {e}")
-        return None
+def make_Pair(first: int, second: int) -> Pair:
+    return Pair(first, second)
 
 
 if __name__ == "__main__":
